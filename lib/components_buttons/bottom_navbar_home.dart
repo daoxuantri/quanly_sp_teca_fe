@@ -1,124 +1,73 @@
 import 'package:flutter/material.dart';
-import 'package:quanly_sp_teca_fe/components_buttons/colors.dart';
 import 'package:quanly_sp_teca_fe/screens/home/home_screen.dart';
-import 'package:quanly_sp_teca_fe/size_config.dart';
 
 class NavigatorBottomBarHome extends StatefulWidget {
   const NavigatorBottomBarHome({super.key, this.currentIndex = 0});
   static String routeName = '/navigator-bottom-bar';
-  final int currentIndex; // Thêm biến để lưu currentIndex
+  final int currentIndex;
 
   @override
   State<NavigatorBottomBarHome> createState() => _NavigatorBottomBarState();
 }
 
 class _NavigatorBottomBarState extends State<NavigatorBottomBarHome> {
-  var currentIndex = 0;
+  late int currentIndex;
 
   @override
   void initState() {
     super.initState();
-    currentIndex = widget.currentIndex; // Gán giá trị cho currentIndex
+    currentIndex = widget.currentIndex;
   }
 
-  // List of icons for the navigation bar
-  List<String> listAssetsIcons = [
-    "IC_Dashboard.png",
-  ];
-
-  // List of labels for the navigation bar
-  List<String> listLabels = [
-    "Trang chủ",
-  ];
-
-  // Corresponding screens for the navigation bar
+  // Danh sách các màn hình tương ứng
   final screens = [
-    HomeScreen()
+    const HomeScreen(),
+    const Center(child: Text("Danh mục - Đang phát triển")), // Placeholder
+    const Center(child: Text("Thống kê - Đang phát triển")), // Placeholder
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: screens[currentIndex],
-      extendBody: true,
-      bottomNavigationBar: Container(
-        margin: const EdgeInsets.fromLTRB(15, 10, 15, 20),
-        height: getProportionateScreenHeight(75), 
-        decoration: BoxDecoration(
-          color: AppColor.colorWhite,
-          boxShadow: [
-            BoxShadow(
-              color: AppColor.colorBlack.withOpacity(.15),
-              blurRadius: 30,
-              offset: const Offset(0, 10),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        backgroundColor: Colors.white,
+        selectedItemColor: const Color(0xFFFF9500), // AppColor.colorFF9500
+        unselectedItemColor: Colors.black, // AppColor.colorBlack
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+        type: BottomNavigationBarType.fixed,
+        elevation: 8,
+        items: [
+          BottomNavigationBarItem(
+            icon: ImageIcon(
+              const AssetImage('assets/images/IC_Dashboard.png'),
+              size: 24,
             ),
-          ],
-          borderRadius: BorderRadius.circular(50),
-        ),
-        child: Center(
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: listAssetsIcons.length,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => InkWell(
-              onTap: () {
-                setState(() {
-                  currentIndex = index;
-                });
-              },
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: getProportionateScreenWidth(15),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: getProportionateScreenWidth(24),
-                      height: getProportionateScreenHeight(24),
-                      child: Image.asset(
-                        'assets/images/${listAssetsIcons[index]}',
-                        color: index == currentIndex
-                            ? AppColor.colorFF9500
-                            : AppColor.colorBlack,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    // Add the label text
-                    Text(
-                      listLabels[index],
-                      style: TextStyle(
-                        color: index == currentIndex
-                            ? AppColor.colorFF9500
-                            : AppColor.colorBlack,
-                        fontSize: getProportionateScreenWidth(10),
-                        fontWeight: index == currentIndex
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    // Animated underline for the active tab
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 1500),
-                      curve: Curves.fastEaseInToSlowEaseOut,
-                      width: getProportionateScreenWidth(33),
-                      height: index == currentIndex
-                          ? getProportionateScreenWidth(5)
-                          : 0,
-                      decoration: BoxDecoration(
-                        color: AppColor.colorFF9500,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            activeIcon: ImageIcon(
+              const AssetImage('assets/images/IC_Dashboard.png'),
+              size: 24,
+              color: const Color(0xFFFF9500),
             ),
+            label: 'Trang chủ',
           ),
-        ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.category),
+            activeIcon: const Icon(Icons.category, color: Color(0xFFFF9500)),
+            label: 'Danh mục',
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.bar_chart),
+            activeIcon: const Icon(Icons.bar_chart, color: Color(0xFFFF9500)),
+            label: 'Thống kê',
+          ),
+        ],
       ),
     );
   }
