@@ -3,17 +3,19 @@ class ProductDataModel {
   String? code;
   String? name;
   String? origin;
+  String? brand;
   String? unit;
   String? priceDate;
   String? supplier;
   String? note;
-  double? price;
+  int? price;
 
   ProductDataModel(
       {this.id,
       this.code,
       this.name,
       this.origin,
+      this.brand,
       this.unit,
       this.priceDate,
       this.supplier,
@@ -25,6 +27,7 @@ class ProductDataModel {
     code = json['code'];
     name = json['name'];
     origin = json['origin'];
+    brand = json['brand'];
     unit = json['unit'];
     priceDate = json['price_date'];
     supplier = json['supplier'];
@@ -38,6 +41,7 @@ class ProductDataModel {
     data['code'] = this.code;
     data['name'] = this.name;
     data['origin'] = this.origin;
+    data['brand']= this.brand;
     data['unit'] = this.unit;
     data['price_date'] = this.priceDate;
     data['supplier'] = this.supplier;

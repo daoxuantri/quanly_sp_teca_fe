@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quanly_sp_teca_fe/screens/CRUD/crud_screen.dart';
+import 'package:quanly_sp_teca_fe/screens/darshboard/darshboard_screen.dart';
 import 'package:quanly_sp_teca_fe/screens/home/home_screen.dart';
 
 class NavigatorBottomBarHome extends StatefulWidget {
@@ -22,8 +24,7 @@ class _NavigatorBottomBarState extends State<NavigatorBottomBarHome> {
   // Danh sách các màn hình tương ứng
   final screens = [
     const HomeScreen(),
-    const Center(child: Text("Danh mục - Đang phát triển")), // Placeholder
-    const Center(child: Text("Thống kê - Đang phát triển")), // Placeholder
+    const DarshBoard()
   ];
 
   @override
@@ -58,14 +59,9 @@ class _NavigatorBottomBarState extends State<NavigatorBottomBarHome> {
             label: 'Trang chủ',
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.category),
-            activeIcon: const Icon(Icons.category, color: Color(0xFFFF9500)),
-            label: 'Danh mục',
-          ),
-          BottomNavigationBarItem(
             icon: const Icon(Icons.bar_chart),
             activeIcon: const Icon(Icons.bar_chart, color: Color(0xFFFF9500)),
-            label: 'Thống kê',
+            label: 'CRUD',
           ),
         ],
       ),

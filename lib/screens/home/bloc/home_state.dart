@@ -28,7 +28,7 @@ class HomeErrorState extends HomeState {
 class HomeErrorScreenToLoginState extends HomeActionState {}
 
 class HomeProductClickedState extends HomeActionState {
-  final String productId;
+  final int productId;
   HomeProductClickedState({
     required this.productId,
   });

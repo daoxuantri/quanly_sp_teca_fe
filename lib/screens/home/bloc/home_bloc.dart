@@ -5,7 +5,6 @@ import 'package:meta/meta.dart';
 import 'package:quanly_sp_teca_fe/api/products.dart';
 import 'package:quanly_sp_teca_fe/model/product/product_data_model.dart';
 
-
 part 'home_event.dart';
 
 part 'home_state.dart';
@@ -21,13 +20,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       HomeInitialEvent event, Emitter<HomeState> emit) async {
     emit(HomeLoadingState());
     try {
-      List<ProductDataModel> listproduct = await ApiServiceProducts().getAllProduct();
+      List<ProductDataModel> listproduct =
+          await ApiServiceProducts().getAllProduct();
+      print(
+          'Products loaded: ${listproduct.length}'); // Debug số lượng sản phẩm
       emit(HomeLoadedSuccessState(listproduct: listproduct));
     } catch (e) {
       String failToken = e.toString();
       if (failToken.startsWith('Exception: ')) {
         failToken = failToken.substring('Exception: '.length);
       }
+      print('Error in homeInitialEvent: $failToken'); // Debug lỗi
       emit(HomeErrorState(errorMessage: failToken));
     }
   }
@@ -41,5 +44,4 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       HomeProductClickedEvent event, Emitter<HomeState> emit) {
     emit(HomeProductClickedState(productId: event.productId));
   }
-
 }
