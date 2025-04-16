@@ -17,3 +17,14 @@ samples, guidance on mobile development, and a full API reference.
 
 ![image](https://github.com/user-attachments/assets/7455138c-52ef-480b-806d-0949fd5ff9d8)
 
+
+
+RUN TO CMD
+
+adb shell
+run-as com.example.quanly_sp_teca_fe
+cd app_flutter
+cp products_export.xlsx /sdcard/
+exit
+exit
+adb pull /sdcard/products_export.xlsx
