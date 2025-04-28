@@ -12,7 +12,7 @@ class DetailInitial extends DetailState {}
 class DetailLoadingState extends DetailState {}
 
 class DetailLoadedSuccessState extends DetailState {
-  final ProductDataModel detailProduct;
+  final DetailProductData detailProduct;
   const DetailLoadedSuccessState({
     required this.detailProduct
   });
@@ -33,3 +33,20 @@ class DetailProductClickedState extends DetailActionState {
     required this.productId,
   });
 }
+
+class EditDetailMainProductClickedState extends DetailActionState {
+  final String message;
+  EditDetailMainProductClickedState({
+    required this.message,
+  });
+}
+class DeletePriceEntriesClickedState extends DetailActionState {
+  final String message;
+  DeletePriceEntriesClickedState({
+    required this.message,
+  });
+}
+
+
+
+

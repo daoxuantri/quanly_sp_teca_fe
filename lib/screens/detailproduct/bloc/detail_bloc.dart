@@ -1,13 +1,10 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:quanly_sp_teca_fe/api/price_entries.dart';
 import 'package:quanly_sp_teca_fe/api/products.dart';
-import 'package:quanly_sp_teca_fe/model/product/product_data_model.dart';
-
+import 'package:quanly_sp_teca_fe/model/product/detail/detail_product_data_model.dart';
 
 part 'detail_event.dart';
-
 part 'detail_state.dart';
 
 class DetailBloc extends Bloc<DetailEvent, DetailState> {
@@ -15,13 +12,15 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
     on<DetailInitialEvent>(detailInitialEvent);
     on<DetailErrorScreenToLoginEvent>(detailErrorScreenToLoginEvent);
     on<DetailProductClickedEvent>(detailProductClickedEvent);
+    on<EditDetailMainProductClickedEvent>(editDetailMainProductClickedEvent);
+    on<DeletePriceEntriesClickedEvent>(deletePriceEntriesClickedEvent);
   }
 
   Future<FutureOr<void>> detailInitialEvent(
       DetailInitialEvent event, Emitter<DetailState> emit) async {
-    emit(DetailLoadingState());
     try {
-      ProductDataModel detailProduct = await ApiServiceProducts().getDetailProduct(event.productId);
+      DetailProductData detailProduct =
+          await ApiServiceProducts().getDetailProduct(event.productId);
       emit(DetailLoadedSuccessState(detailProduct: detailProduct));
     } catch (e) {
       String failToken = e.toString();
@@ -42,4 +41,41 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
     emit(DetailProductClickedState(productId: event.productId));
   }
 
+  // Chỉnh sửa thông tin chính
+  Future<void> editDetailMainProductClickedEvent(
+      EditDetailMainProductClickedEvent event, Emitter<DetailState> emit) async {
+    try {
+      String message = await ApiServiceProducts().updateMainProduct(
+        event.productId,
+        event.code,
+        event.name,
+        event.specificProduct,
+        event.unit,
+        event.note,
+      );
+      emit(EditDetailMainProductClickedState(message: message));
+    } catch (e) {
+      String errorMessage = e.toString();
+      if (errorMessage.startsWith('Exception: ')) {
+        errorMessage = errorMessage.substring('Exception: '.length);
+      }
+      emit(DetailErrorState(errorMessage: errorMessage));
+    }
+  }
+
+  Future<void> deletePriceEntriesClickedEvent(
+      DeletePriceEntriesClickedEvent event, Emitter<DetailState> emit) async {
+    try {
+      print('Xóa sản phẩm');
+      print(event.idPriceEntries);
+      String message = await ApiServicePriceEntries().deletePriceEntries(event.idPriceEntries);
+      emit(DeletePriceEntriesClickedState(message: message));
+    } catch (e) {
+      String errorMessage = e.toString();
+      if (errorMessage.startsWith('Exception: ')) {
+        errorMessage = errorMessage.substring('Exception: '.length);
+      }
+      emit(DetailErrorState(errorMessage: errorMessage));
+    }
+  }
 }

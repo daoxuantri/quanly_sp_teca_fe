@@ -61,7 +61,7 @@ class _NavigatorBottomBarState extends State<NavigatorBottomBarHome> {
           BottomNavigationBarItem(
             icon: const Icon(Icons.bar_chart),
             activeIcon: const Icon(Icons.bar_chart, color: Color(0xFFFF9500)),
-            label: 'CRUD',
+            label: 'Danh mục khác',
           ),
         ],
       ),

@@ -1,16 +1,16 @@
-import 'package:quanly_sp_teca_fe/model/product/product_data_model.dart';
+import 'package:quanly_sp_teca_fe/model/product/detail/detail_product_data_model.dart';
 
 class GetProductByIdRespone {
   bool? success;
   String? message;
-  ProductDataModel? data;
+  DetailProductData? data;
 
   GetProductByIdRespone({this.success, this.message, this.data});
 
   GetProductByIdRespone.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
-    data = json['data'] != null ? new ProductDataModel.fromJson(json['data']) : null;
+    data = json['data'] != null ? new DetailProductData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {

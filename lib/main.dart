@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:quanly_sp_teca_fe/routes.dart';
 import 'package:quanly_sp_teca_fe/screens/splash/splash_screen.dart';
 import 'package:quanly_sp_teca_fe/theme.dart';
-
+//adb connect 127.0.0.1:62001
 void main() {
   runApp(const MyApp());
 }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:quanly_sp_teca_fe/components_buttons/loading.dart';
+import 'package:quanly_sp_teca_fe/components_buttons/snackbar.dart';
 import 'package:quanly_sp_teca_fe/model/product/product_data_model.dart';
+import 'package:quanly_sp_teca_fe/screens/detailproduct/detail_product_screen.dart';
 import 'package:quanly_sp_teca_fe/screens/home/bloc/home_bloc.dart';
 import 'package:quanly_sp_teca_fe/size_config.dart';
 
@@ -44,6 +46,9 @@ class _UpdateDeleteProductScreenState extends State<UpdateDeleteProductScreen> {
               ),
             ),
             onPressed: () {
+               ScaffoldMessenger.of(context).showSnackBar(
+                SnackBarLoginFail('Chưa có làm chức năng xóa'),
+               );
               // TODO: Thêm sự kiện xóa sản phẩm
               // homeBloc.add(HomeDeleteProductEvent(product.id));
               Navigator.pop(context);
@@ -73,7 +78,7 @@ class _UpdateDeleteProductScreenState extends State<UpdateDeleteProductScreen> {
       listenWhen: (previous, current) => current is HomeActionState,
       buildWhen: (previous, current) => current is! HomeActionState,
       listener: (context, state) {
-        // TODO: xử lý hành động nếu cần
+
       },
       builder: (context, state) {
         switch (state.runtimeType) {
@@ -98,7 +103,7 @@ class _UpdateDeleteProductScreenState extends State<UpdateDeleteProductScreen> {
                 children: [
                   // Thanh tìm kiếm
                   Container(
-                    margin: const EdgeInsets.all(16),
+                    margin: EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
@@ -162,20 +167,20 @@ class _UpdateDeleteProductScreenState extends State<UpdateDeleteProductScreen> {
                             key: Key(product.id.toString()),
                             endActionPane: ActionPane(
                               motion:  DrawerMotion(),
-                              extentRatio: 0.5,
+                              extentRatio: 0.25,
                               children: [
-                                SlidableAction(
-                                  onPressed: (_) {
-                                    // TODO: Chuyển đến màn hình chỉnh sửa
-                                    // Navigator.pushNamed(context, EditProductScreen.routeName, arguments: product);
-                                  },
-                                  backgroundColor: Colors.blue.shade700,
-                                  foregroundColor: Colors.white,
-                                  icon: Icons.edit,
-                                  label: 'Sửa',
+                                // SlidableAction(
+                                //   onPressed: (_) {
+                                //     // TODO: Chuyển đến màn hình chỉnh sửa
+                                   
+                                //   },
+                                //   backgroundColor: Colors.blue.shade700,
+                                //   foregroundColor: Colors.white,
+                                //   icon: Icons.edit,
+                                //   label: 'Sửa',
                                   
                                   
-                                ),
+                                // ),
                                 SlidableAction(
                                   onPressed: (_) {
                                     showDeleteConfirmDialog(product);
@@ -206,10 +211,6 @@ class _UpdateDeleteProductScreenState extends State<UpdateDeleteProductScreen> {
                                   product.name ?? '',
                                   style: const TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                subtitle: Text(
-                                  "${(product.price ?? 0).toStringAsFixed(0)} VNĐ | ${product.supplier ?? ''}",
-                                  style: TextStyle(color: Colors.grey.shade600),
-                                ),
                                 trailing: Icon(
                                   Icons.arrow_forward_ios,
                                   size: 16,
@@ -217,6 +218,9 @@ class _UpdateDeleteProductScreenState extends State<UpdateDeleteProductScreen> {
                                 ),
                                 onTap: () {
                                   // TODO: Thêm hành động khi nhấn vào sản phẩm
+
+                                   // TODO: Chuyển đến màn hình chỉnh sửa
+                                    Navigator.pushNamed(context, DetailProductScreen.routeName, arguments: product.id);
                                 },
                               ),
                             ),

@@ -1,52 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:quanly_sp_teca_fe/size_config.dart';
 
-class ExcelExportScreen extends StatefulWidget {
-  static String routeName = "/excel-export";
+class ExportDialog extends StatefulWidget {
+  final Map<String, bool> fieldSelection;
+  final VoidCallback onExport;
 
-  const ExcelExportScreen({super.key});
+  const ExportDialog({
+    super.key,
+    required this.fieldSelection,
+    required this.onExport,
+  });
 
   @override
-  State<ExcelExportScreen> createState() => _ExcelExportScreenState();
+  _ExportDialogState createState() => _ExportDialogState();
 }
 
-class _ExcelExportScreenState extends State<ExcelExportScreen> {
-  Map<String, bool> fieldSelection = {
-    "Tên sản phẩm": true,
-    "Giá": true,
-    "Nhà cung cấp": true,
-    "Nguồn gốc": false,
-    "Đơn vị": false,
-  };
+class _ExportDialogState extends State<ExportDialog> {
+  late Map<String, bool> localFieldSelection;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      showExportDialog(context, fieldSelection, exportFile);
-    });
-  }
-
-  void exportFile() {
-    // TODO: Gọi HomeBloc hoặc API xuất Excel tại đây
-    print("Đang xuất với các trường: ${fieldSelection.entries.where((e) => e.value).map((e) => e.key).toList()}");
+    localFieldSelection = Map.from(widget.fieldSelection);
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text("Đang xử lý xuất file Excel...")),
-    );
-  }
-}
-
-void showExportDialog(
-  BuildContext context,
-  Map<String, bool> fieldSelection,
-  VoidCallback onExport,
-) {
-  showDialog(
-    context: context,
-    builder: (_) => Dialog(
+    return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Container(
         padding: const EdgeInsets.all(20),
@@ -68,29 +48,31 @@ void showExportDialog(
                     color: Colors.blue.shade900,
                   ),
             ),
-            const SizedBox(height: 16),
-            ...fieldSelection.keys.map((field) {
+            SizedBox(height: getProportionateScreenHeight(16)),
+            ...localFieldSelection.keys.map((field) {
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 margin: const EdgeInsets.symmetric(vertical: 4),
                 decoration: BoxDecoration(
-                  color: fieldSelection[field]!
+                  color: localFieldSelection[field]!
                       ? Colors.blue.shade100
                       : Colors.grey.shade100,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: CheckboxListTile(
                   title: Text(field),
-                  value: fieldSelection[field],
+                  value: localFieldSelection[field],
                   activeColor: Colors.blue.shade700,
                   onChanged: (val) {
-                    fieldSelection[field] = val!;
-                    (context as Element).markNeedsBuild(); // update UI
+                    setState(() {
+                      localFieldSelection[field] = val!;
+                      widget.fieldSelection[field] = val;
+                    });
                   },
                 ),
               );
             }),
-            const SizedBox(height: 16),
+            SizedBox(height: getProportionateScreenHeight(16)),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -107,7 +89,7 @@ void showExportDialog(
                   ),
                   onPressed: () {
                     Navigator.pop(context);
-                    onExport(); // Gọi hàm xuất
+                    widget.onExport();
                   },
                   child: const Text("Xuất", style: TextStyle(color: Colors.white)),
                 ),
@@ -116,6 +98,6 @@ void showExportDialog(
           ],
         ),
       ),
-    ),
-  );
+    );
+  }
 }
