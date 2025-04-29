@@ -1,4 +1,4 @@
-import 'package:quanly_sp_teca_fe/model/product/price_entries_data_model.dart';
+import 'package:quanly_sp_teca_fe/model/price_entries/price_entries_data_model.dart';
 
 class DetailProductData {
   int? id;

@@ -20,6 +20,15 @@ class ExcelSelectProductEvent extends ExcelEvent {
   });
 }
 
+class ExcelSelectProjectEvent extends ExcelEvent {
+  final String projectName;
+  final bool isSelected;
+  const ExcelSelectProjectEvent({
+    required this.projectName,
+    required this.isSelected,
+  });
+}
+
 class ExcelExportEvent extends ExcelEvent {
   const ExcelExportEvent();
 }

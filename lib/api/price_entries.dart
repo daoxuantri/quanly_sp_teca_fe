@@ -1,13 +1,17 @@
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:quanly_sp_teca_fe/model/investor_info/product_for_proj/prod_for_proj_data.dart';
+import 'package:quanly_sp_teca_fe/model/investor_info/product_for_proj/product_for_project_res.dart';
+import 'package:quanly_sp_teca_fe/model/price_entries/getall/get_all_price_entries_res.dart';
+import 'package:quanly_sp_teca_fe/model/price_entries/price_entries_data_model.dart';
 import 'package:quanly_sp_teca_fe/model/price_entries/pro_price_entries_respone.dart';
 import 'package:quanly_sp_teca_fe/model/product/detail/detail_product_data_model.dart';
 import 'dart:convert';
 import 'package:quanly_sp_teca_fe/server/server.dart';
 
 class ApiServicePriceEntries {
-  static const String baseUrl = 'https://192.168.1.142:4000';
+  static const String baseUrl = 'https://192.168.1.9:4000';
 
   // delete price_entries
   Future<String> deletePriceEntries(int id) async {
@@ -112,6 +116,76 @@ Future<String> addPriceEntries(
         var responseData = json.decode(response.body);
         if (responseData['success'] == true) {
           var response = ProductForPriceEntriesRespone.fromJson(responseData);
+
+          return response.data!;
+        } else {
+          throw Exception(responseData['message']);
+        }
+      } else if (response.statusCode == 401) {
+        throw Exception('Phiên đăng nhập hết hạn');
+      } else {
+        throw Exception(
+            'Gọi API chi tiết sản phẩm thất bại: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error in getDetailProduct: $e');
+      throw Exception('Lỗi khi lấy chi tiết sản phẩm: $e');
+    } finally {}
+  }
+
+
+
+  // get price_entries theo từng product
+  Future<List<PriceEntriesDataModel>> getAllPriceEntries() async {
+    final client = IOClient(getCustomHttpClient());
+    var url = Uri.parse('$baseUrl/priceEntries/price-entries');
+    var headers = {
+      'accept': 'application/json',
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      var response = await client.get(url, headers: headers);
+
+      if (response.statusCode == 200) {
+        var responseData = json.decode(response.body);
+        if (responseData['success'] == true) {
+          var response = GetAllPriceEntriesRespone.fromJson(responseData);
+
+          return response.data!;
+        } else {
+          throw Exception(responseData['message']);
+        }
+      } else if (response.statusCode == 401) {
+        throw Exception('Phiên đăng nhập hết hạn');
+      } else {
+        throw Exception(
+            'Gọi API chi tiết sản phẩm thất bại: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error in getDetailProduct: $e');
+      throw Exception('Lỗi khi lấy chi tiết sản phẩm: $e');
+    } finally {}
+  }
+
+
+
+  // get products theo từng investor_info
+  Future<List<ProductForProjectDataModel>> getProductForProject() async {
+    final client = IOClient(getCustomHttpClient());
+    var url = Uri.parse('$baseUrl/priceEntries/projects');
+    var headers = {
+      'accept': 'application/json',
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      var response = await client.get(url, headers: headers);
+
+      if (response.statusCode == 200) {
+        var responseData = json.decode(response.body);
+        if (responseData['success'] == true) {
+          var response = ProductForProjectRespone.fromJson(responseData);
 
           return response.data!;
         } else {

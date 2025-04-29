@@ -1,7 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:quanly_sp_teca_fe/api/investor_info.dart';
+import 'package:quanly_sp_teca_fe/api/price_entries.dart';
+import 'package:quanly_sp_teca_fe/api/product_investor.dart';
 import 'package:quanly_sp_teca_fe/api/products.dart';
+import 'package:quanly_sp_teca_fe/model/investor_info/investor_info_model.dart';
+import 'package:quanly_sp_teca_fe/model/price_entries/price_entries_data_model.dart';
 import 'package:quanly_sp_teca_fe/model/product/product_data_model.dart';
 
 
@@ -19,6 +24,7 @@ class CRUDBloc extends Bloc<CRUDEvent, CRUDState> {
   Future<FutureOr<void>> crudInitialEvent(
       CRUDInitialEvent event, Emitter<CRUDState> emit) async {
     emit(CRUDLoadingState());
+    
     try {
       List<ProductDataModel> listproduct = await ApiServiceProducts().getAllProduct();
       emit(CRUDLoadedSuccessState(listproduct: listproduct));

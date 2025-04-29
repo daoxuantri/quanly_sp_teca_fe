@@ -10,7 +10,7 @@ import 'package:quanly_sp_teca_fe/model/product/product_data_model.dart';
 import 'package:quanly_sp_teca_fe/server/server.dart';
 
 class ApiServiceProducts {
-  static const String baseUrl = 'https://192.168.1.142:4000';
+  static const String baseUrl = 'https://192.168.1.9:4000';
 
   // Get all products
   Future<List<ProductDataModel>> getAllProduct() async {

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:quanly_sp_teca_fe/screens/CRUD/crud_screen.dart';
+import 'package:quanly_sp_teca_fe/screens/investor_info/investor_info_screen.dart';
 import 'package:quanly_sp_teca_fe/screens/price_entries/price_entries_screen.dart';
 import 'package:quanly_sp_teca_fe/screens/excel/excel_export_screen.dart';
+import 'package:quanly_sp_teca_fe/screens/product_investor/product_investor_screen.dart';
 import 'package:quanly_sp_teca_fe/screens/updatedel/update_delete_product_screen.dart';
 import 'package:quanly_sp_teca_fe/size_config.dart';
 
@@ -36,8 +38,8 @@ class _DarshBoardState extends State<DarshBoard> {
     _DashboardSection(
       title: "📊 Quản lý dự án & danh mục sản phẩm",
       items: [
-        _DashboardItem(title: "Danh sách dự án", routeName: ""),
-        _DashboardItem(title: "Danh sách sản phẩm cung cấp", routeName: ""),
+        _DashboardItem(title: "Danh sách dự án", routeName: InvestorInfoScreen.routeName),
+        _DashboardItem(title: "Danh sách sản phẩm cung cấp", routeName: ProductInvestorScreen.routeName),
       ],
     ),
   ];
