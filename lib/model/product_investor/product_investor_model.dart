@@ -7,6 +7,9 @@ class ProductInvestorModel {
   int? quantity;
   int? totalNhap;
   int? totalBan;
+  String? code;
+  String? productName;
+  String? supplier;
 
   ProductInvestorModel(
       {this.id,
@@ -16,7 +19,10 @@ class ProductInvestorModel {
       this.priceBan,
       this.quantity,
       this.totalNhap,
-      this.totalBan});
+      this.totalBan,
+      this.code,
+      this.productName,
+      this.supplier});
 
   ProductInvestorModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -27,6 +33,9 @@ class ProductInvestorModel {
     quantity = json['quantity'];
     totalNhap = json['total_nhap'];
     totalBan = json['total_ban'];
+    code = json['code'];
+    productName = json['product_name'];
+    supplier = json['supplier'];
   }
 
   Map<String, dynamic> toJson() {
@@ -39,6 +48,9 @@ class ProductInvestorModel {
     data['quantity'] = this.quantity;
     data['total_nhap'] = this.totalNhap;
     data['total_ban'] = this.totalBan;
+    data['code'] = this.code;
+    data['product_name'] = this.productName;
+    data['supplier'] = this.supplier;
     return data;
   }
 }

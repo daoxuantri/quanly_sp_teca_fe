@@ -1,24 +1,17 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:quanly_sp_teca_fe/api/investor_info.dart';
-import 'package:quanly_sp_teca_fe/api/price_entries.dart';
-import 'package:quanly_sp_teca_fe/api/product_investor.dart';
-import 'package:quanly_sp_teca_fe/api/products.dart';
-import 'package:quanly_sp_teca_fe/model/investor_info/investor_info_model.dart';
-import 'package:quanly_sp_teca_fe/model/price_entries/price_entries_data_model.dart';
-import 'package:quanly_sp_teca_fe/model/product/product_data_model.dart';
-
-
+import 'package:quanly_sp_teca_fe/api/product_price.dart';
 part 'crud_event.dart';
-
 part 'crud_state.dart';
 
 class CRUDBloc extends Bloc<CRUDEvent, CRUDState> {
- CRUDBloc() : super(CRUDInitial()) {
+  CRUDBloc() : super(CRUDInitial()) {
     on<CRUDInitialEvent>(crudInitialEvent);
     on<CRUDErrorScreenToLoginEvent>(crudErrorScreenToLoginEvent);
     on<CRUDProductClickedEvent>(crudProductClickedEvent);
+    on<CRUDAddProductClickedEvent>(crudAddProductClickedEvent);
+    on<CRUDInitialScreenEvent>(crudInitialScreenEvent);
   }
 
   Future<FutureOr<void>> crudInitialEvent(
@@ -26,8 +19,8 @@ class CRUDBloc extends Bloc<CRUDEvent, CRUDState> {
     emit(CRUDLoadingState());
     
     try {
-      List<ProductDataModel> listproduct = await ApiServiceProducts().getAllProduct();
-      emit(CRUDLoadedSuccessState(listproduct: listproduct));
+      // List<ProductDataModel> listproduct = await ApiServiceProducts().getAllProduct();
+      // emit(CRUDLoadedSuccessState(listproduct: listproduct));
     } catch (e) {
       String failToken = e.toString();
       if (failToken.startsWith('Exception: ')) {
@@ -47,4 +40,33 @@ class CRUDBloc extends Bloc<CRUDEvent, CRUDState> {
     emit(CRUDProductClickedState(productId: event.productId));
   }
 
+
+  FutureOr<void> crudInitialScreenEvent(
+      CRUDInitialScreenEvent event, Emitter<CRUDState> emit) {
+    emit(CRUDLoadingState());
+    try{
+       emit(CRUDInitialScreenState());
+    }catch(e){
+
+    }
+  }
+
+  Future<FutureOr<void>> crudAddProductClickedEvent(
+      CRUDAddProductClickedEvent event, Emitter<CRUDState> emit) async {
+    emit(CRUDLoadingState());
+    try {
+      String message = await ApiServiceProductPrice().addProductPrice(
+        event.code, event.name, event.specific_product,event.unit, event.price,event.price_date,
+        event.origin, event.brand, event.supplier,event.asker, event.note
+      );
+      emit(CRUDAddProductClickedState(message: message));
+    } catch (e) {
+      final errorMessage = e.toString();
+      if (errorMessage.contains('Phiên đăng nhập hết hạn')) {
+        emit(CRUDErrorScreenToLoginState());
+      } else {
+        emit(CRUDErrorState(errorMessage: errorMessage));
+      }
+    }
+  }
 }

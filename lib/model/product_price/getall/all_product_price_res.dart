@@ -1,19 +1,19 @@
-import 'package:quanly_sp_teca_fe/model/product/product_data_model.dart';
+import 'package:quanly_sp_teca_fe/model/product_price/product_price_model.dart';
 
-class ListProductRespone {
+class GetAllProductPriceRespone {
   bool? success;
   String? message;
-  List<ProductDataModel>? data;
+  List<ProductPriceModel>? data;
 
-  ListProductRespone({this.success, this.message, this.data});
+  GetAllProductPriceRespone({this.success, this.message, this.data});
 
-  ListProductRespone.fromJson(Map<String, dynamic> json) {
+  GetAllProductPriceRespone.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <ProductDataModel>[];
+      data = <ProductPriceModel>[];
       json['data'].forEach((v) {
-        data!.add(new ProductDataModel.fromJson(v));
+        data!.add(new ProductPriceModel.fromJson(v));
       });
     }
   }
@@ -28,4 +28,3 @@ class ListProductRespone {
     return data;
   }
 }
-

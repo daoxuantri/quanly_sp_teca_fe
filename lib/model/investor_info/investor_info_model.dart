@@ -1,24 +1,40 @@
 class InvestorInfoModel {
   int? id;
-  String? deliveryDate;
-  String? projectName;
+  String? projectCode;
+  String? name;
+  String? startDate;
+  String? endDate;
+  String? supervisor;
+  String? status;
 
-  InvestorInfoModel({this.id, this.deliveryDate, this.projectName});
+  InvestorInfoModel(
+      {this.id,
+      this.projectCode,
+      this.name,
+      this.startDate,
+      this.endDate,
+      this.supervisor,
+      this.status});
 
   InvestorInfoModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    // Cắt chuỗi delivery_date để chỉ lấy YYYY-MM-DD
-    deliveryDate = json['delivery_date'] != null
-        ? json['delivery_date'].toString().split('T').first
-        : null;
-    projectName = json['project_name'];
+    projectCode = json['project_code'];
+    name = json['name'];
+    startDate = json['start_date'];
+    endDate = json['end_date'];
+    supervisor = json['supervisor'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['delivery_date'] = deliveryDate;
-    data['project_name'] = projectName;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['project_code'] = this.projectCode;
+    data['name'] = this.name;
+    data['start_date'] = this.startDate;
+    data['end_date'] = this.endDate;
+    data['supervisor'] = this.supervisor;
+    data['status'] = this.status;
     return data;
   }
 }

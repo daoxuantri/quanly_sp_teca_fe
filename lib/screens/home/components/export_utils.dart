@@ -4,15 +4,15 @@ import 'package:excel/excel.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:quanly_sp_teca_fe/model/product/product_data_model.dart';
+import 'package:quanly_sp_teca_fe/model/product_price/product_price_model.dart'; 
 import 'package:quanly_sp_teca_fe/screens/home/bloc/home_bloc.dart';
 
 Future<void> exportFile({
   required BuildContext context,
   required HomeBloc homeBloc,
-  required List<ProductDataModel> products,
+  required List<ProductPriceModel> products,
   required Map<String, bool> fieldSelection,
-  required List<ProductDataModel> Function(List<ProductDataModel>) getFilteredProducts,
+  required List<ProductPriceModel> Function(List<ProductPriceModel>) getFilteredProducts,
 }) async {
   print('Export file - Current state: ${homeBloc.state.runtimeType}');
   if (Platform.isAndroid) {
@@ -60,20 +60,16 @@ Future<void> exportFile({
 
   List<String> headers = [];
   if (fieldSelection["Tên sản phẩm"]!) headers.add("Tên sản phẩm");
-  if (fieldSelection["Giá"]!) headers.add("Giá");
-  if (fieldSelection["Nhà cung cấp"]!) headers.add("Nhà cung cấp");
-  if (fieldSelection["Xuất xứ"]!) headers.add("Xuất xứ");
-  if (fieldSelection["Thương hiệu"]!) headers.add("Thương hiệu");
+  if (fieldSelection["Mã sản phẩm"]!) headers.add("Mã sản phẩm");
+  if (fieldSelection["Ngày hỏi giá"]!) headers.add("Ngày hỏi giá");
 
   sheet.appendRow(headers);
 
   for (var product in filteredProducts) {
     List<dynamic> row = [];
     if (fieldSelection["Tên sản phẩm"]!) row.add(product.name ?? '');
-    if (fieldSelection["Giá"]!) row.add(product.price?.toString() ?? '0');
-    if (fieldSelection["Nhà cung cấp"]!) row.add(product.supplier ?? '');
-    if (fieldSelection["Xuất xứ"]!) row.add(product.origin ?? 'N/A');
-    if (fieldSelection["Thương hiệu"]!) row.add(product.brand ?? '');
+    if (fieldSelection["Mã sản phẩm"]!) row.add(product.code ?? '');
+    if (fieldSelection["Ngày hỏi giá"]!) row.add(product.priceDate ?? 'N/A');
     sheet.appendRow(row);
   }
 

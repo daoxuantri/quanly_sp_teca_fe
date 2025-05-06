@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:quanly_sp_teca_fe/model/product/product_data_model.dart';
+import 'package:quanly_sp_teca_fe/model/product_price/product_price_model.dart'; 
 
 void showDeleteConfirmDialog(
   BuildContext context,
-  ProductDataModel product,
+  ProductPriceModel product,
   VoidCallback onDelete,
 ) {
   showDialog(

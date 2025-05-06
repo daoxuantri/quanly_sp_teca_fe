@@ -1,7 +1,6 @@
 part of 'home_bloc.dart';
 
-
-abstract class HomeState{
+abstract class HomeState {
   const HomeState();
 }
 
@@ -12,9 +11,9 @@ class HomeInitial extends HomeState {}
 class HomeLoadingState extends HomeState {}
 
 class HomeLoadedSuccessState extends HomeState {
-  final List<ProductDataModel> listproduct;
+  final List<ProductPriceModel> listproduct;
   const HomeLoadedSuccessState({
-    required this.listproduct
+    required this.listproduct,
   });
 }
 
@@ -28,9 +27,22 @@ class HomeErrorState extends HomeState {
 class HomeErrorScreenToLoginState extends HomeActionState {}
 
 class HomeProductClickedState extends HomeActionState {
-  final int productId;
+  final ProductPriceModel product;
   HomeProductClickedState({
-    required this.productId,
+    required this.product,
   });
 }
 
+class HomeProductRemovedClickedState extends HomeActionState {
+  final String message;
+  HomeProductRemovedClickedState({
+    required this.message,
+  });
+}
+
+class HomeCreateProductSuccessState extends HomeActionState {
+  final String message;
+  HomeCreateProductSuccessState({
+    required this.message,
+  });
+}

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:quanly_sp_teca_fe/components_buttons/loading.dart';
 import 'package:quanly_sp_teca_fe/components_buttons/snackbar.dart';
-import 'package:quanly_sp_teca_fe/model/product/product_data_model.dart';
+import 'package:quanly_sp_teca_fe/model/product_price/product_price_model.dart'; 
 import 'package:quanly_sp_teca_fe/screens/detailproduct/detail_product_screen.dart';
 import 'package:quanly_sp_teca_fe/screens/home/bloc/home_bloc.dart';
 import 'package:quanly_sp_teca_fe/size_config.dart';
@@ -26,7 +26,7 @@ class _UpdateDeleteProductScreenState extends State<UpdateDeleteProductScreen> {
     super.initState();
   }
 
-  void showDeleteConfirmDialog(ProductDataModel product) {
+  void showDeleteConfirmDialog(ProductPriceModel product) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -53,14 +53,14 @@ class _UpdateDeleteProductScreenState extends State<UpdateDeleteProductScreen> {
               // homeBloc.add(HomeDeleteProductEvent(product.id));
               Navigator.pop(context);
             },
-            child: const Text("Xóa", style: TextStyle(color: Colors.white)),
+            child: Text("Xóa", style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
     );
   }
 
-  List<ProductDataModel> getFilteredProducts(List<ProductDataModel> products) {
+  List<ProductPriceModel> getFilteredProducts(List<ProductPriceModel> products) {
     if (searchQuery.isEmpty) return products;
     return products.where((product) {
       final name = product.name?.toLowerCase() ?? '';
@@ -217,10 +217,8 @@ class _UpdateDeleteProductScreenState extends State<UpdateDeleteProductScreen> {
                                   color: Colors.grey.shade400,
                                 ),
                                 onTap: () {
-                                  // TODO: Thêm hành động khi nhấn vào sản phẩm
-
-                                   // TODO: Chuyển đến màn hình chỉnh sửa
-                                    Navigator.pushNamed(context, DetailProductScreen.routeName, arguments: product.id);
+                                  
+                                    Navigator.pushNamed(context, DetailProductScreen.routeName, arguments: product);
                                 },
                               ),
                             ),

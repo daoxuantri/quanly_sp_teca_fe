@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:quanly_sp_teca_fe/components_buttons/bottom_navbar_home.dart';
 import 'package:quanly_sp_teca_fe/screens/CRUD/crud_screen.dart';
 import 'package:quanly_sp_teca_fe/screens/darshboard/darshboard_screen.dart';
-import 'package:quanly_sp_teca_fe/screens/detailproduct/detail_product_screen.dart';
+import 'package:quanly_sp_teca_fe/screens/detailproduct/detail_product_screen.dart'; 
 import 'package:quanly_sp_teca_fe/screens/home/home_screen.dart';
-import 'package:quanly_sp_teca_fe/screens/investor_info/investor_info_screen.dart';
-import 'package:quanly_sp_teca_fe/screens/price_entries/price_entries_screen.dart';
-import 'package:quanly_sp_teca_fe/screens/product_investor/product_investor_screen.dart';
+import 'package:quanly_sp_teca_fe/screens/productandproject/project_and_product_screen.dart'; 
 import 'package:quanly_sp_teca_fe/screens/splash/splash_screen.dart';
 import 'package:quanly_sp_teca_fe/screens/excel/excel_export_screen.dart';
 import 'package:quanly_sp_teca_fe/screens/updatedel/update_delete_product_screen.dart'; 
@@ -25,6 +23,8 @@ final Map<String , WidgetBuilder> routes ={
   //home
   HomeScreen.routeName : (context) => const HomeScreen(),
 
+  DetailProductScreen.routeName : (context) => const DetailProductScreen(),
+
 
   //CRUD
   CRUDScreen.routeName : (context) => CRUDScreen(),
@@ -37,17 +37,9 @@ final Map<String , WidgetBuilder> routes ={
   UpdateDeleteProductScreen.routeName : (context) => UpdateDeleteProductScreen() ,
 
   //excel 
-  ExcelExportScreen.routeName : (context) => ExcelExportScreen() ,
+  ExcelExportScreen.routeName : (context) => ExcelExportScreen() , 
 
-  DetailProductScreen.routeName : (context) =>  DetailProductScreen(),
-
-  //price_entries
-  PriceEntriesScreen.routeName : (context) =>  PriceEntriesScreen(),
-
-  //investor_info
-  InvestorInfoScreen.routeName : (context) => InvestorInfoScreen (),
-
-  ProductInvestorScreen.routeName: (context) => ProductInvestorScreen (),
+  ProjectAndProductScreen.routeName: (context) => ProjectAndProductScreen (),
 
 
 

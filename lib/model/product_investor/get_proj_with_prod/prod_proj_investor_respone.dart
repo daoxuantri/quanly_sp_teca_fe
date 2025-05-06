@@ -1,19 +1,20 @@
-import 'package:quanly_sp_teca_fe/model/product/detail/detail_product_data_model.dart';
+import 'package:quanly_sp_teca_fe/model/product_investor/product_investor_model.dart';
 
-class ProductForPriceEntriesRespone {
+
+class GetProjectwithProductInvestorRespone {
   bool? success;
   String? message;
-  List<DetailProductData>? data;
+  List<ProductInvestorModel>? data;
 
-  ProductForPriceEntriesRespone({this.success, this.message, this.data});
+  GetProjectwithProductInvestorRespone({this.success, this.message, this.data});
 
-  ProductForPriceEntriesRespone.fromJson(Map<String, dynamic> json) {
+  GetProjectwithProductInvestorRespone.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <DetailProductData>[];
+      data = <ProductInvestorModel>[];
       json['data'].forEach((v) {
-        data!.add(new DetailProductData.fromJson(v));
+        data!.add(new ProductInvestorModel.fromJson(v));
       });
     }
   }

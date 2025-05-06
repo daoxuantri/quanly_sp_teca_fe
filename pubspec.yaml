@@ -48,7 +48,7 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   dropdown_button2: ^2.3.8
   dio: ^5.0.0
-  equatable: ^2.0.0
+  equatable: ^2.0.5
   device_preview: ^1.1.0
   image_picker: ^1.1.2
   google_fonts: ^6.2.0
@@ -58,6 +58,7 @@ dependencies:
   permission_handler: ^11.3.0
   open_file: ^3.5.4
   share_plus: ^7.2.2
+  file_picker: ^5.2.5
 
 
 dev_dependencies:

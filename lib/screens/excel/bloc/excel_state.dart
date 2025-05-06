@@ -22,7 +22,7 @@ class ExcelErrorState extends ExcelState {
 
 class ExcelOptionSelectedState extends ExcelState {
   final ExportOption selectedOption;
-  final List<DetailProductData> products;
+  final List<ProductPriceModel> products;
   final List<ProductForProjectDataModel> projects;
   final List<String> selectedProductNames;
   final List<String> selectedProjectNames;

@@ -1,17 +1,15 @@
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
 import 'package:quanly_sp_teca_fe/model/investor_info/getall/get_all_investorinfo_res.dart';
-import 'package:quanly_sp_teca_fe/model/investor_info/investor_info_model.dart';
-import 'package:quanly_sp_teca_fe/model/price_entries/getall/get_all_price_entries_res.dart';
-import 'package:quanly_sp_teca_fe/model/price_entries/price_entries_data_model.dart';
-import 'package:quanly_sp_teca_fe/model/product/detail/detail_product_data_model.dart';
-import 'package:quanly_sp_teca_fe/model/product_investor/prod_proj_investor_respone.dart';
+import 'package:quanly_sp_teca_fe/model/investor_info/investor_info_model.dart';  
 import 'package:quanly_sp_teca_fe/model/product_investor/product_investor_model.dart';
+import 'package:quanly_sp_teca_fe/model/product_price/getall/all_product_price_res.dart';
+import 'package:quanly_sp_teca_fe/model/product_price/product_price_model.dart';
 import 'dart:convert';
 import 'package:quanly_sp_teca_fe/server/server.dart';
 
 class ApiServiceProductInvestor {
-  static const String baseUrl = 'https://192.168.1.9:4000';
+  static const String baseUrl = 'https://192.168.0.112:4000';
 
   // Get all products by investor id
   Future<List<ProductInvestorModel>> getProductsByInvestor(int id) async {
@@ -45,24 +43,27 @@ class ApiServiceProductInvestor {
     }
   }
 
-  // Get investor info with products by id
-  Future<DetailProductData> getInvestorInfoWithProductById(int id) async {
+  // delete Product Investor by id
+  Future<String> deleteProductInvestorById(int id ) async { 
     final client = IOClient(getCustomHttpClient());
-    var url = Uri.parse('$baseUrl/productInvestor/$id');
+    var url = Uri.parse('$baseUrl/productInvestor/delete');
     var headers = {
       'accept': 'application/json',
       'Content-Type': 'application/json',
     };
+    
+    var body = jsonEncode({
+      'id': id, 
+    });
 
     try {
-      var response = await client.get(url, headers: headers);
+      var response = await client.post(url, headers: headers, body: body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         var responseData = json.decode(response.body);
-        if (responseData['success'] == true) {
-          var response = GetProjectwithProductInvestorRespone.fromJson(responseData);
-          return response.data!;
+        if (responseData['success'] == true) {  
+          return responseData['message'];
         } else {
-          throw Exception(responseData['message'] ?? 'Lấy dữ liệu thất bại');
+          throw Exception(responseData['message'] ?? 'Xóa sản phẩm thất bại');
         }
       } else if (response.statusCode == 401) {
         throw Exception('Phiên đăng nhập hết hạn');
@@ -70,15 +71,15 @@ class ApiServiceProductInvestor {
         throw Exception('Gọi API thất bại: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error in getInvestorInfoWithProductById: $e');
-      throw Exception('Lỗi khi lấy dữ liệu: $e');
+      print('Error in deleteProductInvestorById: $e');
+      throw Exception('Lỗi khi xóa sản phẩm: $e');
     }
   }
 
-  // Get price entries (used for list in dialog)
-  Future<List<PriceEntriesDataModel>> getPriceEntries() async {
+  // Get price entries (used for list in dialog)   -> mới sửa ngày 05/05/2025
+  Future<List<ProductPriceModel>> getPriceEntries() async {
     final client = IOClient(getCustomHttpClient());
-    var url = Uri.parse('$baseUrl/priceEntries/price-entries');
+    var url = Uri.parse('$baseUrl/productPrice');
     var headers = {
       'accept': 'application/json',
       'Content-Type': 'application/json',
@@ -89,7 +90,7 @@ class ApiServiceProductInvestor {
       if (response.statusCode == 200) {
         var responseData = json.decode(response.body);
         if (responseData['success'] == true) {
-          var response = GetAllPriceEntriesRespone.fromJson(responseData);
+          var response = GetAllProductPriceRespone.fromJson(responseData);
           return response.data ?? [];
         } else {
           throw Exception(responseData['message'] ?? 'Lấy danh sách giá thất bại');
@@ -101,6 +102,7 @@ class ApiServiceProductInvestor {
       }
     } catch (e) {
       print('Error in getPriceEntries: $e');
+      print('Lỗi tại đây111111111111111');
       throw Exception('Lỗi khi lấy danh sách giá: $e');
     }
   }
