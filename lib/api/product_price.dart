@@ -31,23 +31,41 @@ class ApiServiceProductPrice {
     } catch (e) {
       print('Error in getAllProduct: $e');
       throw Exception('Lỗi khi lấy danh sách sản phẩm: $e');
-    } finally {}
-  }
-
-  //create excel
-  Future<void> createProduct(ProductPriceModel product) async {
-    final client = IOClient(getCustomHttpClient());
-    final response = await client.post(
-      Uri.parse('$baseUrl/productPrice'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(product.toJson()),
-    );
-    if (response.statusCode != 201) {
-      throw Exception('Failed to create product: ${response.body}');
+    } finally {
+      client.close();
     }
   }
 
-  // Update chi tiết sản phẩm
+  // Create product
+  Future<void> createProduct(ProductPriceModel product) async {
+    final client = IOClient(getCustomHttpClient());
+    try {
+      final response = await client.post(
+        Uri.parse('$baseUrl/productPrice'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'code': product.code ?? '',
+          'name': product.name ?? '',
+          'specific_product': product.specificProduct ?? '',
+          'unit': product.unit ?? '',
+          'price': product.price ?? 0, // Gán mặc định 0 nếu null
+          'price_date': product.priceDate ?? '',
+          'origin': product.origin ?? '',
+          'brand': product.brand ?? '',
+          'supplier': product.supplier ?? '',
+          'asker': product.asker ?? '',
+          'note': product.note ?? '',
+        }),
+      );
+      if (response.statusCode != 201) {
+        throw Exception('Failed to create product: ${response.body}');
+      }
+    } finally {
+      client.close();
+    }
+  }
+
+  // Update product details
   Future<String> updateDetailProductPrice(
       int productId,
       String? code,
@@ -62,22 +80,19 @@ class ApiServiceProductPrice {
       String? asker,
       String? note) async {
     final client = IOClient(getCustomHttpClient());
-    // Sửa endpoint thành /products/:id
     var url = Uri.parse('$baseUrl/productPrice/$productId');
     var headers = {
       'accept': 'application/json',
       'Content-Type': 'application/json',
     };
 
-    // Giữ price_date ở định dạng DD/MM/YYYY hoặc '' nếu rỗng
     String? formattedPriceDate;
     if (priceDate != null && priceDate.isNotEmpty) {
       try {
-        // Đảm bảo priceDate đã ở định dạng DD/MM/YYYY
         DateFormat('dd/MM/yyyy').parseStrict(priceDate);
-        formattedPriceDate = priceDate; // Giữ nguyên DD/MM/YYYY
+        formattedPriceDate = priceDate;
       } catch (e) {
-        formattedPriceDate = ''; // Gửi chuỗi rỗng nếu định dạng không hợp lệ
+        formattedPriceDate = '';
       }
     } else {
       formattedPriceDate = '';
@@ -85,28 +100,20 @@ class ApiServiceProductPrice {
 
     var body = json.encode({
       'code': code ?? '',
-      'name': name,
-      'specific_product': specificProduct,
-      'unit': unit,
+      'name': name ?? '',
+      'specific_product': specificProduct ?? '',
+      'unit': unit ?? '',
       'price': price ?? 0,
       'price_date': formattedPriceDate,
-      'origin': origin,
-      'brand': brand,
+      'origin': origin ?? '',
+      'brand': brand ?? '',
       'supplier': supplier ?? '',
       'asker': asker ?? '',
-      'note': note,
+      'note': note ?? '',
     });
-
-    // Logging chi tiết các giá trị
-    print('Updating product with ID: $productId');
-    print('Request URL: $url');
-    print('Request body: $body');
 
     try {
       var response = await client.put(url, headers: headers, body: body);
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-
       if (response.statusCode == 200) {
         var responseData = json.decode(response.body);
         if (responseData['success'] == true) {
@@ -132,7 +139,7 @@ class ApiServiceProductPrice {
     }
   }
 
-  // delete product
+  // Delete product
   Future<String> deleteProductPrice(int productId) async {
     final client = IOClient(getCustomHttpClient());
     var url = Uri.parse('$baseUrl/productPrice/$productId');
@@ -143,7 +150,6 @@ class ApiServiceProductPrice {
 
     try {
       var response = await client.delete(url, headers: headers);
-
       if (response.statusCode == 200) {
         var responseData = json.decode(response.body);
         if (responseData['success'] == true) {
@@ -155,22 +161,24 @@ class ApiServiceProductPrice {
         throw Exception('Phiên đăng nhập hết hạn');
       } else {
         throw Exception(
-            'Gọi API chi tiết sản phẩm thất bại: ${response.statusCode}');
+            'Gọi API xóa sản phẩm thất bại: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error in getDetailProduct: $e');
-      throw Exception('Lỗi khi lấy chi tiết sản phẩm: $e');
-    } finally {}
+      print('Error in deleteProductPrice: $e');
+      throw Exception('Lỗi khi xóa sản phẩm: $e');
+    } finally {
+      client.close();
+    }
   }
 
-  // add product
+  // Add product
   Future<String> addProductPrice(
       String code,
       String name,
-      String specific_product,
+      String specificProduct,
       String unit,
-      int price,
-      String price_date,
+      int? price, // Đổi thành int? để chấp nhận null
+      String priceDate,
       String origin,
       String brand,
       String supplier,
@@ -186,10 +194,10 @@ class ApiServiceProductPrice {
     var body = json.encode({
       'code': code,
       'name': name,
-      'specific_product': specific_product,
+      'specific_product': specificProduct,
       'unit': unit,
-      'price': price,
-      'price_date': price_date,
+      'price': price ?? 0, // Gán mặc định 0 nếu null
+      'price_date': priceDate,
       'origin': origin,
       'brand': brand,
       'supplier': supplier,
@@ -199,7 +207,6 @@ class ApiServiceProductPrice {
 
     try {
       var response = await client.post(url, headers: headers, body: body);
-
       if (response.statusCode == 201) {
         var responseData = json.decode(response.body);
         if (responseData['success'] == true) {
@@ -211,11 +218,13 @@ class ApiServiceProductPrice {
         throw Exception('Phiên đăng nhập hết hạn');
       } else {
         throw Exception(
-            'Gọi API chi tiết sản phẩm thất bại: ${response.statusCode}');
+            'Gọi API thêm sản phẩm thất bại: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error in getDetailProduct: $e');
-      throw Exception('Lỗi khi lấy chi tiết sản phẩm: $e');
-    } finally {}
+      print('Error in addProductPrice: $e');
+      throw Exception('Lỗi khi thêm sản phẩm: $e');
+    } finally {
+      client.close();
+    }
   }
 }

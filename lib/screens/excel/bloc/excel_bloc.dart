@@ -235,8 +235,6 @@
 //   }
 // }
 
-
-
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:excel/excel.dart';
@@ -247,7 +245,6 @@ import 'package:quanly_sp_teca_fe/api/investor_info.dart';
 import 'package:quanly_sp_teca_fe/api/product_price.dart';
 import 'package:quanly_sp_teca_fe/model/investor_info/product_for_proj/prod_for_proj_data.dart';
 import 'package:quanly_sp_teca_fe/model/product_price/product_price_model.dart';
-import 'package:quanly_sp_teca_fe/screens/excel/bloc/excel_bloc.dart';
 import 'package:quanly_sp_teca_fe/screens/excel/excel_export_screen.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -273,6 +270,8 @@ class ExcelBloc extends Bloc<ExcelEvent, ExcelState> {
       // Lấy danh sách dự án
       List<ProductForProjectDataModel> projects =
           await ApiServiceInvestorInfo().getProductForProject();
+      print('Products: ${products.length}'); // In số lượng sản phẩm
+      print('Projects: ${projects.length}'); // In số lượng dự án
       emit(ExcelOptionSelectedState(
         selectedOption: ExportOption.none,
         products: products,
@@ -319,7 +318,8 @@ class ExcelBloc extends Bloc<ExcelEvent, ExcelState> {
       ExcelSelectProductEvent event, Emitter<ExcelState> emit) async {
     if (state is ExcelOptionSelectedState) {
       final currentState = state as ExcelOptionSelectedState;
-      final updatedProductNames = List<String>.from(currentState.selectedProductNames);
+      final updatedProductNames =
+          List<String>.from(currentState.selectedProductNames);
       if (event.isSelected) {
         if (!updatedProductNames.contains(event.productName)) {
           updatedProductNames.add(event.productName);
@@ -341,7 +341,8 @@ class ExcelBloc extends Bloc<ExcelEvent, ExcelState> {
       ExcelSelectProjectEvent event, Emitter<ExcelState> emit) async {
     if (state is ExcelOptionSelectedState) {
       final currentState = state as ExcelOptionSelectedState;
-      final updatedProjectNames = List<String>.from(currentState.selectedProjectNames);
+      final updatedProjectNames =
+          List<String>.from(currentState.selectedProjectNames);
       if (event.isSelected) {
         if (!updatedProjectNames.contains(event.projectName)) {
           updatedProjectNames.add(event.projectName);
@@ -396,24 +397,28 @@ class ExcelBloc extends Bloc<ExcelEvent, ExcelState> {
           for (var projectName in currentState.selectedProjectNames) {
             final selectedProject = currentState.projects
                 .firstWhere((project) => project.projectName == projectName);
-            final projectData = selectedProject.products?.map((product) => {
-                      "Tên dự án": selectedProject.projectName ?? 'Không có',
-                      "Tên sản phẩm": product.name ?? 'Không có',
-                      "Mã sản phẩm": product.code ?? 'Không có',
-                      "Chi tiết sản phẩm": product.specificProduct ?? 'Không có',
-                      "Đơn vị": product.unit ?? 'Không có',
-                      "Giá nhập": product.priceNhap ?? 0,
-                      "Giá bán": product.priceBan ?? 0,
-                      "Số lượng": product.quantity ?? 0,
-                      "Tổng nhập": product.totalNhap ?? 0,
-                      "Tổng bán": product.totalBan ?? 0,
-                      "Xuất xứ": product.origin ?? 'Không có',
-                      "Thương hiệu": product.brand ?? 'Không có',
-                      "Nhà cung cấp": product.supplier ?? 'Không có',
-                      "Ngày hỏi giá": product.priceDate ?? 'Không có',
-                      "Người hỏi giá": product.asker ?? 'Không có',
-                      "Ghi chú": product.note ?? 'Không có',
-                    }).toList() ??
+            final projectData = selectedProject.products
+                    ?.map((product) => {
+                          "Tên dự án":
+                              selectedProject.projectName ?? 'Không có',
+                          "Tên sản phẩm": product.name ?? 'Không có',
+                          "Mã sản phẩm": product.code ?? 'Không có',
+                          "Chi tiết sản phẩm":
+                              product.specificProduct ?? 'Không có',
+                          "Đơn vị": product.unit ?? 'Không có',
+                          "Giá nhập": product.priceNhap ?? 0,
+                          "Giá bán": product.priceBan ?? 0,
+                          "Số lượng": product.quantity ?? 0,
+                          "Tổng nhập": product.totalNhap ?? 0,
+                          "Tổng bán": product.totalBan ?? 0,
+                          "Xuất xứ": product.origin ?? 'Không có',
+                          "Thương hiệu": product.brand ?? 'Không có',
+                          "Nhà cung cấp": product.supplier ?? 'Không có',
+                          "Ngày hỏi giá": product.priceDate ?? 'Không có',
+                          "Người hỏi giá": product.asker ?? 'Không có',
+                          "Ghi chú": product.note ?? 'Không có',
+                        })
+                    .toList() ??
                 [];
             exportData.addAll(projectData);
           }
@@ -427,12 +432,28 @@ class ExcelBloc extends Bloc<ExcelEvent, ExcelState> {
         var excel = Excel.createExcel();
         Sheet sheetObject = excel['Sheet1'];
 
+        // Thêm tiêu đề (các cột)
         if (exportData.isNotEmpty) {
-          sheetObject.appendRow(exportData.first.keys.toList());
+          sheetObject.appendRow(
+            exportData.first.keys.map((key) => TextCellValue(key)).toList(),
+          );
         }
 
+        // Thêm dữ liệu từng dòng
         for (var item in exportData) {
-          sheetObject.appendRow(item.values.toList());
+          sheetObject.appendRow(
+            item.values.map((value) {
+              if (value is String) {
+                return TextCellValue(value);
+              } else if (value is int) {
+                return IntCellValue(value);
+              } else if (value is double) {
+                return DoubleCellValue(value);
+              } else {
+                return TextCellValue(value.toString());
+              }
+            }).toList(),
+          );
         }
 
         var status = await Permission.storage.request();

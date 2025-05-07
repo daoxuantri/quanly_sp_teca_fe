@@ -12,19 +12,20 @@ class ProductPriceModel {
   String? asker;
   String? note;
 
-  ProductPriceModel(
-      {this.id,
-      this.code,
-      this.name,
-      this.specificProduct,
-      this.unit,
-      this.price,
-      this.priceDate,
-      this.origin,
-      this.brand,
-      this.supplier,
-      this.asker,
-      this.note});
+  ProductPriceModel({
+    this.id,
+    this.code,
+    this.name,
+    this.specificProduct,
+    this.unit,
+    this.price,
+    this.priceDate,
+    this.origin,
+    this.brand,
+    this.supplier,
+    this.asker,
+    this.note,
+  });
 
   ProductPriceModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -58,6 +59,3 @@ class ProductPriceModel {
     return data;
   }
 }
-
-
-
